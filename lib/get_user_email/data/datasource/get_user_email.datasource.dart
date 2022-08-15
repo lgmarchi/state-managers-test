@@ -1,7 +1,6 @@
-import 'package:dartz/dartz.dart';
-
+import '../../../core/failure_or_success.dart';
 import '../../domain/entities/email.entity.dart';
 
 abstract class IGetUserEmailDataSource {
-  Future<Either<Error, UserEmail>> getUserEmail();
+  Future<FailureOrSuccess<Error, UserEmail>> getUserEmail();
 }

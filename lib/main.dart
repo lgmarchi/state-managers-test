@@ -6,6 +6,7 @@ import 'package:mobx_clean_arch/get_user_email/data/repositories/get_user_email_
 import 'package:mobx_clean_arch/get_user_email/domain/repositories/get_user_email.repository.dart';
 import 'package:mobx_clean_arch/get_user_email/domain/usecases/get_user_email.usecase.dart';
 
+import 'bloc_with_clean_arch/domain/usecases/user_email_bloc.usecase.dart';
 import 'get_user_email/domain/usecases/get_user_email_impl.usecase.dart';
 import 'get_user_email/presentation/controller/get_user_email.controller.dart';
 import 'get_user_email/presentation/pages/show_user_email.dart';
@@ -18,22 +19,27 @@ void main() {
 void _registerDependencies() {
   GetIt getIt = GetIt.I;
 
-  getIt.registerLazySingleton<IGetUserEmailUseCase>(
-      () => UserEmailGetUseCaseImpl(getIt()));
-
-  getIt.registerLazySingleton<IGetUserEmailRepository>(
-      () => GetUserEmailRepositoryImpl(getIt()));
-
-  getIt.registerLazySingleton<IGetUserEmailDataSource>(
-      () => GetUserEmailDataSourceImplApi());
-
-  getIt.registerLazySingleton<GetUserEmailController>(
-    () => GetUserEmailController(
-      UserEmailGetUseCaseImpl(
-        getIt(),
+  /// Dependency Injection for GetUserEmail feature
+  getIt
+    ..registerLazySingleton<IGetUserEmailUseCase>(
+      () => UserEmailGetUseCaseImpl(getIt()),
+    )
+    ..registerLazySingleton<IUserEmailUseCase>(
+      () => UserEmailUseCase(getIt()),
+    )
+    ..registerLazySingleton<IGetUserEmailRepository>(
+      () => GetUserEmailRepositoryImpl(getIt()),
+    )
+    ..registerLazySingleton<IGetUserEmailDataSource>(
+      () => GetUserEmailDataSourceImplApi(),
+    )
+    ..registerLazySingleton<GetUserEmailController>(
+      () => GetUserEmailController(
+        UserEmailGetUseCaseImpl(
+          getIt(),
+        ),
       ),
-    ),
-  );
+    );
 }
 
 class MyApp extends StatelessWidget {

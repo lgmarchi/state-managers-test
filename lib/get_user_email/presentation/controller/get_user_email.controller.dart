@@ -32,10 +32,10 @@ abstract class _GetUserEmailControllerBase with Store {
       _changeGetUserEmailState(GetUserEmailState.loading);
       Future.delayed(const Duration(seconds: 3), () async {
         await userEmailGetUseCaseImpl.call().then(
-              (value) => value.fold(
-                (l) => _changeGetUserEmailState(GetUserEmailState.error),
-                (r) {
-                  userEmail = r;
+              (value) => value.rule(
+                (failure) => _changeGetUserEmailState(GetUserEmailState.error),
+                (success) {
+                  userEmail = success;
                   _changeGetUserEmailState(GetUserEmailState.success);
                 },
               ),
